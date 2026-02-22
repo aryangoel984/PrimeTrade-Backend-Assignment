@@ -65,4 +65,25 @@ If you wish to run this application locally:
 ### 1. Clone the repository
 ```bash
 git clone [https://github.com/aryangoel984/PrimeTrade-Backend-Assignment.git](https://github.com/aryangoel984/PrimeTrade-Backend-Assignment.git)
+
 cd PrimeTrade-Backend-Assignment
+cd backend
+npm install
+
+# Create a .env file and add your credentials:
+# DATABASE_URL="your_neon_postgres_url"
+# JWT_SECRET="your_secret_key"
+# PORT=3001
+
+npx prisma generate
+npx prisma db push
+
+npm run dev
+cd ../frontend
+npm install
+
+# Create a .env.local file and add your local API URL:
+# NEXT_PUBLIC_API_URL="http://localhost:3001/api/v1"
+
+npm run dev
+Developed by Aryan Goel for the PrimeTrade Engineering Assessment.
