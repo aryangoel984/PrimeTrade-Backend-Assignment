@@ -18,9 +18,9 @@ app.use(cors());
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
-app.use('/api/notes', notesRoutes);
-app.use('/api/bookmarks', bookmarksRoutes);
-app.use('/api/auth',authRoutes)
+app.use('/api/v1/notes', notesRoutes);
+app.use('/api/v1/bookmarks', bookmarksRoutes);
+app.use('/api/v1/auth',authRoutes)
 
 // Root Route (Health Check)
 app.get('/', (req, res) => {

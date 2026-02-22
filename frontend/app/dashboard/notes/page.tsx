@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Plus, Search, Tag, Trash2, X, Heart } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function NotesPage() {
   const [notes, setNotes] = useState([]);
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   
@@ -129,15 +131,17 @@ export default function NotesPage() {
                 <Heart size={18} fill={note.isFavorite ? "currentColor" : "none"} />
               </button>
 
-              {/* Delete Button */}
-              <button 
-              // @ts-ignore
-                onClick={() => handleDelete(note.id)}
-                className="p-1.5 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 transition"
-                title="Delete Note"
-              >
-                <Trash2 size={18} />
-              </button>
+              {/* Delete Button - ONLY VISIBLE TO ADMIN */}
+{user?.role === 'ADMIN' && (
+  <button 
+  // @ts-ignore
+    onClick={() => handleDelete(note.id)}
+    className="p-1.5 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 transition"
+    title="Delete Note"
+  >
+    <Trash2 size={18} />
+  </button>
+)}
             </div>
 
             {/* Note Title */}

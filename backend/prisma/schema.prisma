@@ -8,12 +8,16 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+enum Role {
+  USER
+  ADMIN
+}
 model User {
   id        String     @id @default(uuid())
   email     String     @unique
   password  String     // Store hashed passwords here
-  notes     Note[]
+  role     Role   @default(USER) // Add this line
+  notes    Note[]
   bookmarks Bookmark[]
   createdAt DateTime   @default(now())
 }

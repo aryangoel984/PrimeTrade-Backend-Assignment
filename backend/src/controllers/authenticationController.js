@@ -26,12 +26,11 @@ exports.signup = async (req, res) => {
     const user = await prisma.user.create({
       data: {
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        role: 'USER', // Ensure your schema.prisma has this field!
       }
     });
 
-    // CHANGE: Do NOT return a token here. 
-    // Just confirm creation so the frontend knows to redirect to the Login page.
     res.status(201).json({ 
       message: 'User created successfully. Please log in.',
       userId: user.id 
@@ -66,13 +65,25 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Token is ONLY generated here
-    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '7d' });
+    // ⭐ CHANGE 1: Inject the role into the JWT Token
+    const token = jwt.sign(
+      { 
+        userId: user.id,
+        role: user.role 
+      }, 
+      SECRET_KEY, 
+      { expiresIn: '7d' }
+    );
 
     res.json({ 
       message: 'Login successful',
       token, 
-      user: { id: user.id, email: user.email } 
+      // ⭐ CHANGE 2: Send the role back to the Frontend UI
+      user: { 
+        id: user.id, 
+        email: user.email,
+        role: user.role 
+      } 
     });
 
   } catch (error) {

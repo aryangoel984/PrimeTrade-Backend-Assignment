@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { Plus, Search, Tag, Trash2, ExternalLink, Globe, X, Heart } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function BookmarksPage() {
+  const { user } = useAuth();
   const [bookmarks, setBookmarks] = useState([]);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -170,13 +172,16 @@ export default function BookmarksPage() {
                 <Heart size={20} fill={bookmark.isFavorite ? "currentColor" : "none"} />
               </button>
 
-               <button 
-                onClick={() => handleDelete(bookmark.id)}
-                className="text-gray-400 hover:text-red-600 transition p-2 rounded-lg hover:bg-red-50"
-                title="Delete Bookmark"
-              >
-                <Trash2 size={20} />
-              </button>
+               {/* Delete Button - ONLY VISIBLE TO ADMIN */}
+{user?.role === 'ADMIN' && (
+  <button 
+    onClick={() => handleDelete(bookmark.id)}
+    className="text-gray-400 hover:text-red-600 transition p-2 rounded-lg hover:bg-red-50"
+    title="Delete Bookmark"
+  >
+    <Trash2 size={20} />
+  </button>
+)}
             </div>
           </div>
         ))}
